@@ -1,0 +1,15 @@
+<div class="container" ng-controller="ChatController">
+    <h1>RealTime Chat</h1>
+
+    <%= form_for(Chat.new) do |f|%>
+        <div class="form-group">
+            <%= f.label :message %>
+            <%= f.text_field :message, :class => "form-control" %>
+        </div>
+
+        <%= f.submit "Talk" %>
+    <% end %>
+    
+    <ol id="chats">
+    </ol>
+</div>
