@@ -1,6 +1,6 @@
 class ChatsController < ApplicationController
   def create
-    @chat = NewChatAction.new(params[:chat][:message])
+    @chat = NewChatAction.new(params[:message])
     @chat.create!
 
     respond_to do |format|

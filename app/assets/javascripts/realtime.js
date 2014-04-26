@@ -1,7 +1,16 @@
 ChatApp = angular.module('ChatApp', []);
 
-ChatApp.controller('ChatController', function ($scope) {
+ChatApp.config(function ($httpProvider) {
+    $httpProvider.defaults.headers.common['X-CSRF-TOKEN'] = $("meta[name=\"csrf-token\"]").attr("content");
+});
+
+ChatApp.controller('ChatController', function ($scope, $http) {
     $scope.messages = [];
+    $scope.send = function () {
+        var message = $scope.new_message;
+        $http.post('/chats', {'message': message}).success(function() {});
+        $scope.new_message = '';
+    };
 
     function start() {
         if (!window.EventSource) {
@@ -19,7 +28,7 @@ ChatApp.controller('ChatController', function ($scope) {
         source.addEventListener('message', function (e) {
             var message = JSON.parse(e.data);
             $scope.$apply(function () {
-                $scope.messages.unshift(message.message);
+                $scope.messages.unshift(message);
             });
         }, false);
 
