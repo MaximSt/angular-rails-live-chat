@@ -3,25 +3,33 @@ module PubSub
   
   included do
     def broadcast!
-      self.class.pubsub_redis.publish(:chats, self.pubsubdata)
+      self.class.publish_from(self)
     end
   end
 
   module ClassMethods
-    @pubsub_redis
-
     def pubsub_redis
-      @pubsub_redis.call()
+      @redis_method.call
     end
 
-    def pubsub &block
-      @pubsub_redis = Proc.new do
-        yield block
-      end
+    def pubsub_source &blk
+      @redis_method = blk
+    end
+
+    def pubsub_data method
+      @pubsub_data_method = method
+    end
+
+    def pubsub_channel channel
+      @channel = channel
     end
 
     def subscribe(&block)
-      self.pubsub_redis.subscribe :chats, &block
+      self.pubsub_redis.subscribe @channel, &block
+    end
+
+    def publish_from source
+      self.pubsub_redis.publish(@channel, source.send(@pubsub_data_method))
     end
   end
 end

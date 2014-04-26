@@ -1,9 +1,14 @@
 class Chat < ActiveRecord::Base
   include PubSub
 
-  pubsub { Redis.new }
+  pubsub_source do
+    Redis.new
+  end
 
-  def pubsubdata
-    message
+  pubsub_data :get_pubsub_data
+  pubsub_channel "chats"
+
+  def get_pubsub_data
+    self.message
   end
 end
