@@ -1,6 +1,12 @@
 # A simple realtime chat using Rails and Angularjs
 
 
+## Requirement
+
+* Thin/Puma servers or similar
+* Chrome or Firefox or something else that support SSE natively. 
+
+
 ## Some tricks and pitfalls in ActionController::live
 
 During the development, I noticed some common pitfalls in ActionController::live, I call them `坑` (pronounced as "/kng/")
