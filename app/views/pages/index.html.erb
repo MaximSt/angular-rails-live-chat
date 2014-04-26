@@ -1,15 +1,16 @@
 <div class="container" ng-controller="ChatController">
     <h1>RealTime Chat</h1>
 
-    <%= form_for(Chat.new) do |f|%>
+    <form ng-submit="send()" class="form">
         <div class="form-group">
-            <%= f.label :message %>
-            <%= f.text_field :message, :class => "form-control" %>
+            <label for="new_message">Message</label>
+            <input type="text" class="form-control" ng-model="new_message" />
         </div>
 
-        <%= f.submit "Talk" %>
-    <% end %>
+        <input type="submit" class="btn btn-primary" />
+    </form>
     
     <ol id="chats">
+        <li ng-repeat="message in messages">{{ message.message }}</li>
     </ol>
 </div>
