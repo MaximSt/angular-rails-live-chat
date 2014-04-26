@@ -1,29 +1,34 @@
-if (!window.EventSource) {
-    alert('Your browser does not support SSE');
-}
+ChatApp = angular.module('ChatApp', []);
 
-var source;
+ChatApp.controller('ChatController', function ($scope) {
+    $scope.messages = [];
 
-function connect() {
-    source = new EventSource('/realtime/stream');
-}
+    function start() {
+        if (!window.EventSource) {
+            alert('Your browser does not support SSE');
+        }
 
-connect();
+        var source;
 
-source.addEventListener('message', function (e) {
-    /*
-    console.log("got event:");
-    console.log(e);
-     */
+        function connect() {
+            source = new EventSource('/realtime/stream');
+        }
 
-    var event = JSON.parse(e.data);
-    var li = jQuery('<li />');
-    li.html(event.message);
-    li.prependTo(jQuery('#chats'));
-}, false);
-
-source.addEventListener('error', function (e) {
-    if (e.readyState == EventSource.CLOSED) {
         connect();
+
+        source.addEventListener('message', function (e) {
+            var message = JSON.parse(e.data);
+            $scope.$apply(function () {
+                $scope.messages.unshift(message.message);
+            });
+        }, false);
+
+        source.addEventListener('error', function (e) {
+            if (e.readyState == EventSource.CLOSED) {
+                connect();
+            }
+        }, false);
     }
-}, false);
+
+    start();
+});
