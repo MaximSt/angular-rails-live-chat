@@ -4,7 +4,9 @@
 ## Requirement
 
 * Thin/Puma servers or similar
-* Chrome or Firefox or something else that support SSE natively. 
+* Chrome or Firefox or something else that support SSE
+  natively. However, it looks like some adblocks make SSE connection
+  stalling in "pending" status.
 
 
 ## Some tricks and pitfalls in ActionController::live
