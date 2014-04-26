@@ -3,7 +3,7 @@ class RealtimeController < ActionController::Base
 
   def stream
     response.headers['Content-Type'] = 'text/event-stream'
-    Redis.new.subscribe :chats do |on|
+    Chat.subscribe do |on|
       on.message do |channel, message|
         # let's ignore channel for now
         response.stream.write sse(:message => message)

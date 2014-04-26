@@ -1,6 +1,9 @@
 class Chat < ActiveRecord::Base
-  def broadcast!
-    redis = Redis.new
-    redis.publish(:chats, self.message)
+  include PubSub
+
+  pubsub { Redis.new }
+
+  def pubsubdata
+    message
   end
 end
