@@ -8,7 +8,7 @@ ChatApp.controller('ChatController', function ($scope, $http) {
     $scope.messages = [];
     $scope.send = function () {
         var message = $scope.new_message;
-        $http.post('/chats', {'message': message}).success(function() {});
+        $http.post('/chats.js', {'message': message}).success(function() {});
         $scope.new_message = '';
     };
 

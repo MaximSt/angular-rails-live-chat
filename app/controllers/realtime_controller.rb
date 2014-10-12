@@ -3,18 +3,18 @@ class RealtimeController < ActionController::Base
 
   def stream
     response.headers['Content-Type'] = 'text/event-stream'
+    sse = SSE.new(response.stream, id: 2, retry: 300, event: 'message')
     Chat.subscribe do |on|
       on.message do |channel, message|
-        # let's ignore channel for now
-        response.stream.write sse(:message => message)
+        sse.write({ :message => message })
       end
     end
   ensure
-    response.stream.close
+    sse.close
   end
 
-  private
-  def sse(object, options={})
-    (options.map{|k,v| "#{k}: #{v}" } << "data: #{JSON.dump object}").join("\n") + "\n\n"
-  end
+  # private
+  # def sse(object, options={})
+  #   (options.map{|k,v| "#{k}: #{v}" } << "data: #{JSON.dump object}").join("\n") + "\n\n"
+  # end
 end
